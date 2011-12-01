@@ -1,0 +1,33 @@
+This is a list of contributors to the source code and data files
+
+In particular, we thank Ancestry.com for providing the following data files:
+names-eval/src/main/resources/AncestryGivennamePairs.csv
+names-eval/src/main/resources/AncestrySurnamePairs.csv
+names-eval/src/main/resources/BorderSurnamePairs.csv
+names-eval/src/main/resources/givenname_ancestry.txt (generated from AncestryGivennamePairs.csv)
+names-eval/src/main/resources/surname_ancestry.txt (generated from AncestrySurnamePairs.csv)
+names-search/src/main/resources/normalizer.properties (edited by Dallan Quass)
+names-eval/src/main/resources/givenname_nicknames.txt (edited by Dallan Quass)
+
+We also thank WeRelate users for providing the following data files
+names-eval/src/main/resources/givenname_werelate.txt
+   (also includes names from "Dunkling, Leslie and William Gosling,
+   The New American Dictionary of Baby Names, published by Signet (New American Library), 1985")
+names-eval/src/main/resources/surname_werelate.txt
+   (also includes names from "Patrick Hanks and Flavia Hodges,
+   A Dictionary of Surnames, Oxford University Press, 1990.")
+names-search/src/main/resources/givenname_similar_names.csv
+   (on-going edits, see http://www.werelate.org/wiki/Special:NamesLog)
+names-search/src/main/resources/surname_similar_names.csv
+   (on-going edits, see http://www.werelate.org/wiki/Special:NamesLog)
+
+This project also ships with freetts.jar and cmulex_lts.bin from http://freetts.sourceforge.net
+The freetts source has been modified to make it thread-safe: https://sourceforge.net/tracker/?func=detail&aid=3447358&group_id=42080&atid=432076
+
+
+Names should be added to this file like so:
+Name or Organization <email address>
+
+Foundation for On-Line Genealogy <dallan@werelate.org>
+Ancestry.com <ljensen@ancestry.com>
+WeRelate users [http://www.werelate.org/wiki/Special:NamesLog]

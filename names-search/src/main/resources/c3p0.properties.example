@@ -1,0 +1,11 @@
+# if you read similar names from a database in Standardizer, copy this file to c3p0.properties and customize
+
+c3p0.minPoolSize=1
+c3p0.initialPoolSize=1
+c3p0.acquireIncrement=1
+c3p0.maxPoolSize=15
+c3p0.maxConnectionAge=7200
+c3p0.maxIdleTime=1800
+c3p0.maxIdleTimeExcessConnections=180
+c3p0.idleConnectionTestPeriod=300
+c3p0.maxStatementsPerConnection=1
