@@ -8,4 +8,4 @@ c3p0.maxConnectionAge=7200
 c3p0.maxIdleTime=1800
 c3p0.maxIdleTimeExcessConnections=180
 c3p0.idleConnectionTestPeriod=300
-c3p0.maxStatementsPerConnection=1
+c3p0.maxStatementsPerConnection=10

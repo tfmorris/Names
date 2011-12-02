@@ -24,11 +24,11 @@ public class ScorerTest extends TestCase {
    }
 
    public void testScorer() throws Exception {
-      Scorer scorer = new Scorer(false);
+      Scorer scorer = Scorer.getGivennameInstance();
       assertEquals(1527, (int)Math.floor(scorer.scoreNamePair("dallan","allan")*1000));
       assertEquals(-1010, (int)Math.floor(scorer.scoreNamePair("ann","roseanne")*1000));
 
-      scorer = new Scorer(true);
+      scorer = Scorer.getSurnameInstance();
       assertEquals(937, (int)Math.floor(scorer.scoreNamePair("quass","quast")*1000));
    }
 }

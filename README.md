@@ -93,7 +93,7 @@ In addition,
 Building
 --------
 
-`mvn install` &nbsp; creates the normal jar file as well as one with all dependencies
+`mvn install` creates the normal jar file as well as one with all dependencies
 
 
 Score module
@@ -153,16 +153,16 @@ name Z.  In other words, similarity is reflexive but not transitive. Attempting 
 cluster names and searching on cluster centroids only, assumes transitivity, which
 doesn't exist.
 
-Installation and Building
--------------------------
+Building
+--------
 
-Before using _Scorer.java_ you must install the customized freetts.jar provided in
+Before building _Scorer.java_ you must install the customized freetts.jar from
 the _external_ directory into your local maven repository:
 
     mvn install:install-file -Dfile=external/freetts.jar -DgroupId=com.sun.speech
     -DartifactId=freetts -Dversion=1.2.2-threadsafe -Dpackaging=jar
 
-`mvn install` &nbsp; creates the normal jar file as well as one with all dependencies
+`mvn install` creates the normal jar file as well as one with all dependencies
 
 Eval module
 ===========
@@ -208,3 +208,24 @@ Finally, we added _givenname\_ancestry.txt_ and _surname\_ancestry.txt_ to creat
 tables found in the Search module, although user-modifications to these tables as part of
 the [Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project)
 will further modify, and hopefully improve, these tables.
+
+Service module
+==============
+
+Use this module if you want to generate search and index tokens or score names
+by issuing REST calls.  This module allows you to use the Similar names project
+as a REST service instead of as a library.
+
+The service endpoints are:
+
+* _index/type/name_ returns all tokens to index for the name.
+* _search/type/name_ returns all tokens to search for the name.
+* _score/type/name1/name2_ returns the score of name1 and name2
+
+In all cases, type is either "givenname" or "surname".  You can request the result
+as XML or JSON by requesting a content type of "application/xml" or "application/json".
+
+Building
+--------
+
+`mvn package` creates a war file that you can deploy to a servlet container like Tomcat

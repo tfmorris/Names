@@ -23,11 +23,19 @@ import java.util.logging.Logger;
  */
 public class Scorer {
    private static Logger logger = Logger.getLogger("org.folg.names.score");
+   private static final Scorer surnameScorer = new Scorer(true);
+   private static final Scorer givennameScorer = new Scorer(false);
+   public static Scorer getGivennameInstance() {
+      return givennameScorer;
+   }
+   public static Scorer getSurnameInstance() {
+      return surnameScorer;
+   }
 
    private final FeaturesGenerator featuresGenerator;
    private final FeaturesScorer featuresScorer;
 
-   public Scorer(final boolean isSurname) {
+   private Scorer(final boolean isSurname) {
       this.featuresGenerator = new FeaturesGenerator(isSurname);
       this.featuresScorer = new FeaturesScorer(isSurname);
    }
