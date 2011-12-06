@@ -156,11 +156,15 @@ doesn't exist.
 Building
 --------
 
-Before building _Scorer.java_ you must install the customized freetts.jar from
-the _external_ directory into your local maven repository:
+Before building _Scorer.java_ you must install the customized freetts.jar and
+William Cohen's secondstring library from the _external_ directory into your
+local maven repository:
 
     mvn install:install-file -Dfile=external/freetts.jar -DgroupId=com.sun.speech
     -DartifactId=freetts -Dversion=1.2.2-threadsafe -Dpackaging=jar
+
+    mvn install:install-file -Dfile=external/secondstring.jar -DgroupId=com.wcohen.ss
+    -DartifactId=secondstring -Dversion=20101021 -Dpackaging=jar
 
 `mvn install` creates the normal jar file as well as one with all dependencies
 
