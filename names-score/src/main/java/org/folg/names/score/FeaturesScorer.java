@@ -44,15 +44,6 @@ public class FeaturesScorer {
               features.refinedSoundex * 0.5052 +
               features.dmSoundex * 0.9679 +
               features.levenstein * 0.3696;
-// the following has an F-measure of 85.3, but it's twice as slow due to monge-elkan
-//wed          -6.4616
-//nys           0.6069
-//sdx           0.1822
-//rsdx          0.5699
-//dmsdx         0.8952
-//me           -1.5917
-//lev           0.3973
-//Intercept     9.9146
       }
       else {
 // Logistic (F=94.4)

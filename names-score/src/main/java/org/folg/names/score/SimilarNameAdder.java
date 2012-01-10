@@ -16,86 +16,75 @@
 
 package org.folg.names.score;
 
-import org.folg.names.search.Normalizer;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
- * Add one or more names to a similar-names file.
- * This program adds new lines to a similar-names file. The names should not already exist in the file.
+ * Create a similar names file by including all names scoring above a threshold
  * If you want to augment (expand) a similar-names file with additional names on existing lines, use SimilarNameAugmenter.
  */
 public class SimilarNameAdder {
    private static Logger logger = Logger.getLogger("org.folg.names.score");
 
-   @Option(name="-i", required=true, usage="similar names in")
-   private File similarNamesInFile = null;
+   @Option(name="-i", required=true, usage="common names in")
+   private File commonNamesFile = null;
 
    @Option(name="-o", required=true, usage="similar names out")
-   private File similarNamesOutFile = null;
+   private File similarNamesFile = null;
+
+   @Option(name="-t", required=false, usage="min score threshold")
+   private double threshold = 0.0;
 
    @Option(name="-s", required=false, usage="is surname")
    private boolean isSurname = false;
 
-   @Option(name="-n", required=true, usage="names to add in")
-   private File namesFile = null;
+   @Option(name="-b", required=false, usage="beginning name to generate")
+   private int begin = 0;
 
-   @Option(name="-m", required=false, usage="max number of names to add")
-   private int namesToAdd = Integer.MAX_VALUE;
+   @Option(name="-n", required=false, usage="number of names to generate")
+   private int maxNames = Integer.MAX_VALUE;
 
    private void doMain() {
-      BufferedReader similarNamesReader = null;
-      BufferedReader namesReader = null;
+      Scorer scorer = isSurname ? Scorer.getSurnameInstance() : Scorer.getGivennameInstance();
+      BufferedReader commonNamesReader = null;
       PrintWriter similarNamesWriter = null;
-      Set<String> seenNames = new HashSet<String>();
-      Normalizer normalizer = Normalizer.getInstance();
-      SimilarNameGenerator generator = new SimilarNameGenerator(isSurname, false);
 
       try {
-         similarNamesReader = new BufferedReader(new FileReader(similarNamesInFile));
-         namesReader = new BufferedReader(new FileReader(namesFile));
-         similarNamesWriter = new PrintWriter(similarNamesOutFile);
+         // read common names into a list (assume common names are already normalized)
+         commonNamesReader = new BufferedReader(new FileReader(commonNamesFile));
+         List<String> commonNames = new ArrayList<String>();
          String line;
-
-         // read similar names into memory, and write them out
-         while ((line = similarNamesReader.readLine()) != null) {
-            // line is "name","similar names"
-            String[] fields = line.split(",",2);
-            seenNames.add(fields[0].substring(1, fields[0].length() - 1));
-            similarNamesWriter.println(line);
+         while ((line = commonNamesReader.readLine()) != null) {
+            commonNames.add(line);
          }
 
-         // for each name from namesReader
-         System.out.print("Processing");
+         // for each common name, find other common names scoring above threshold and print
+         similarNamesWriter = new PrintWriter(similarNamesFile);
          int cnt = 0;
-         while (cnt < namesToAdd && (line = namesReader.readLine()) != null) {
-            // line is name,other stuff
-            String[] fields = line.split("[:,]+",2); // ignore stuff after the first comma or colon
-            // normalize the name into possibly multiple name pieces
-            for (String name : normalizer.normalize(fields[0], isSurname)) {
-               // skip 1-character names and names we've already seen
-               if (name.length() > 1 && seenNames.add(name)) {
-                  Collection<String> similarNames = new TreeSet<String>();
-                  // generate the similar names, in alphabetical order
-                  for (String similarName : generator.generateSimilarNames(name)) {
-                     similarNames.add(similarName);
-                  }
-                  // write them out
-                  similarNamesWriter.println("\""+name+"\",\""+Utils.join(" ",similarNames)+"\"");
-                  cnt++;
-                  if (cnt % 1000 == 0) {
-                     System.out.print(".");
+         for (String name : commonNames) {
+            if (cnt >= begin && cnt < begin + maxNames) {
+               Set<String> similarNames = new TreeSet<String>();
+               for (String otherName : commonNames) {
+                  // Test only otherNames that this name is less than
+                  // We'll run SimilarNameAugmenter later to add the reverse relationships
+                  if (name.compareTo(otherName) < 0) {
+                     double score = scorer.scoreNamePair(name, otherName);
+                     if (score >= threshold) {
+                        similarNames.add(otherName);
+                     }
                   }
                }
+               similarNamesWriter.println("\""+name+"\",\""+Utils.join(" ",similarNames)+"\"");
+               if (cnt % 1000 == 0) {
+                  System.out.print(".");
+               }
             }
+            cnt++;
          }
          System.out.println();
       }
@@ -104,11 +93,8 @@ public class SimilarNameAdder {
       }
       finally {
          try {
-            if (similarNamesReader != null) {
-               similarNamesReader.close();
-            }
-            if (namesReader != null) {
-               namesReader.close();
+            if (commonNamesReader != null) {
+               commonNamesReader.close();
             }
             if (similarNamesWriter != null) {
                similarNamesWriter.close();

@@ -49,6 +49,7 @@ public class WeightedEditDistance {
       if (sourceTokens.length == 0 || targetTokens.length == 0) {
          return Double.NEGATIVE_INFINITY;
       }
+      // order of source, target may make a difference.  See comment in FST.java.
       FST fst = new FST(sourceTokens, targetTokens);
       fst.computeBestPath(we);
       return fst.getBestPathScore(we, smooth);

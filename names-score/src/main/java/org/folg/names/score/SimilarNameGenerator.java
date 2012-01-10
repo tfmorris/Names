@@ -137,11 +137,10 @@ public class SimilarNameGenerator {
    private void testName(String name, Codes codes, String testName, Features features, List<NameScore> similarNames, double classifierThreshold) {
       if (!name.equals(testName)) {
          Codes testCodes = featuresGenerator.getCodes(testName);
-         if (featuresGenerator.setFeatures(name, codes, testName, testCodes, features, false)) {
-            double score = featuresScorer.score(features);
-            if (score >= classifierThreshold) {
-               similarNames.add(new NameScore(testName,score));
-            }
+         featuresGenerator.setFeatures(name, codes, testName, testCodes, features);
+         double score = featuresScorer.score(features);
+         if (score >= classifierThreshold) {
+            similarNames.add(new NameScore(testName,score));
          }
       }
    }
@@ -196,7 +195,7 @@ public class SimilarNameGenerator {
             Cluster cluster = clusters[i];
             String clusterName = cluster.name;
             Codes clusterNameCodes = clusterCodes[i];
-            featuresGenerator.setFeatures(name, codes, clusterName, clusterNameCodes, features, false);
+            featuresGenerator.setFeatures(name, codes, clusterName, clusterNameCodes, features);
             double score = featuresScorer.score(features);
             if (score > closestClusterScore) {
                closestCluster = cluster;
@@ -218,11 +217,10 @@ public class SimilarNameGenerator {
             String commonName = commonNames[i];
             if (!name.equals(commonName)) {
                Codes commonCodes = commonNameCodes[i];
-               if (featuresGenerator.setFeatures(name, codes, commonName, commonCodes, features, false)) {
-                  double score = featuresScorer.score(features);
-                  if (score >= classifierThreshold) {
-                     similarNames.add(new NameScore(commonName, score));
-                  }
+               featuresGenerator.setFeatures(name, codes, commonName, commonCodes, features);
+               double score = featuresScorer.score(features);
+               if (score >= classifierThreshold) {
+                  similarNames.add(new NameScore(commonName, score));
                }
             }
          }

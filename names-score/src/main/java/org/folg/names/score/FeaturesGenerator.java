@@ -70,30 +70,26 @@ public class FeaturesGenerator {
     * @param name2 name to test
     * @param codes2 codes for name to test
     * @param features Features struct to set
-    * @param beQuick if true, be quick at the expense of accuracy
-    * @return false in beQuick mode if none of the codes match (in which case features are not set)
     */
-   public boolean setFeatures(String name1, Codes codes1, String name2, Codes codes2, Features features, boolean beQuick) {
+   public void setFeatures(String name1, Codes codes1, String name2, Codes codes2, Features features) {
       try {
-         if (!beQuick ||
-             // in quick mode, soundex or dmSoundex much match
-             codes1.sdxCode.equals(codes2.sdxCode) ||
-             codes1.dmSdxCode.equals(codes2.dmSdxCode)) {
-            features.weightedEditDistance = wed.getScore(codes1.wedTokens, codes2.wedTokens);
-            if (isSurname) {
-               features.nysiis = codeScorer(codes1.nysCode, codes2.nysCode);
-            }
-            features.soundex = codeScorer(codes1.sdxCode, codes2.sdxCode);
-            features.refinedSoundex = codeScorer(codes1.refSdxCode, codes2.refSdxCode);
-            features.dmSoundex = codeScorer(codes1.dmSdxCode, codes2.dmSdxCode);
-            features.levenstein = levenstein.score(name1, name2);
-            return true;
+         features.weightedEditDistance = wed.getScore(codes1.wedTokens, codes2.wedTokens);
+         // See comment in FST.java to understand why we do this
+         double reverseDistance = wed.getScore(codes2.wedTokens, codes1.wedTokens);
+         if (features.weightedEditDistance > reverseDistance) {
+            features.weightedEditDistance = reverseDistance;
          }
+         if (isSurname) {
+            features.nysiis = codeScorer(codes1.nysCode, codes2.nysCode);
+         }
+         features.soundex = codeScorer(codes1.sdxCode, codes2.sdxCode);
+         features.refinedSoundex = codeScorer(codes1.refSdxCode, codes2.refSdxCode);
+         features.dmSoundex = codeScorer(codes1.dmSdxCode, codes2.dmSdxCode);
+         features.levenstein = levenstein.score(name1, name2);
       }
       catch (IllegalArgumentException e) {
          logger.severe("Illegal argument for pair: "+name1+","+name2+" "+e);
       }
-      return false;
    }
 
    /**
@@ -106,6 +102,6 @@ public class FeaturesGenerator {
    public void setFeatures(String name1, String name2, Features features) throws EncoderException {
       Codes codes1 = getCodes(name1);
       Codes codes2 = getCodes(name2);
-      setFeatures(name1, codes1, name2, codes2, features, false);
+      setFeatures(name1, codes1, name2, codes2, features);
    }
 }

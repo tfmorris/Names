@@ -53,6 +53,9 @@ public class SimilarNameAugmenter {
    @Option(name="-p", required=false, usage="add pair-wise combinations")
    private boolean pairwiseCombos = false;
 
+   @Option(name="-r", required=false, usage="omit rare names")
+   private boolean omitRare = false;
+
    private int uncommonTargets = 0;
    StringEncoder coder = new Soundex();
    Collection<String> commonNames = new HashSet<String>();
@@ -70,8 +73,8 @@ public class SimilarNameAugmenter {
                String targetCode = coder.encode(target);
                // only add name to target if it is common
                if (commonNames.contains(target)) {
-                  // only add source if it is common, or if its soundex doesn't match target's soundex
-                  if (commonNames.contains(source) || !sourceCode.equals(targetCode)) {
+                  // only add source if it is common, or if its soundex doesn't match target's soundex and we're not omitting rare names
+                  if (commonNames.contains(source) || (!omitRare && !sourceCode.equals(targetCode))) {
                      Set<String> names = namesToAdd.get(target);
                      if (names == null) {
                         names = new HashSet<String>();
@@ -116,16 +119,21 @@ public class SimilarNameAugmenter {
          // read names to add and construct a name->similar names table
          namesReader = new BufferedReader(new FileReader(namesFile));
          while ((line = namesReader.readLine()) != null) {
-            String[] fields = line.split("[:, ]+");
+            // assume names are split on : , or space, and that they may be surrounded by quotes
+            String[] fields = line.trim().replace("\"","").split("[:,\\s]+");
             boolean result = true;
-            for (int i = 1; i < fields.length; i++) {
-               result = result && add(namesToAdd, fields[0], fields[i]);
-               if (pairwiseCombos || allCombos) {
-                  result = result && add(namesToAdd, fields[i], fields[0]);
-                  if (allCombos) {
-                     for (int j = 1; j < fields.length; j++) {
-                        if (i != j) {
-                           result = result && add(namesToAdd, fields[i], fields[j]);
+            if (fields.length > 1) {
+               for (int i = 1; i < fields.length; i++) {
+                  if (fields[i].length() > 0) {
+                     result = result && add(namesToAdd, fields[0], fields[i]);
+                     if (pairwiseCombos || allCombos) {
+                        result = result && add(namesToAdd, fields[i], fields[0]);
+                        if (allCombos) {
+                           for (int j = 1; j < fields.length; j++) {
+                              if (i != j) {
+                                 result = result && add(namesToAdd, fields[i], fields[j]);
+                              }
+                           }
                         }
                      }
                   }
@@ -145,8 +153,8 @@ public class SimilarNameAugmenter {
             String[] fields = line.split(",",2);
             String name = fields[0].substring(1, fields[0].length() - 1);
             Set<String> similarNames = new TreeSet<String>();
-            for (String similarName : fields[1].substring(1, fields[1].length() - 1).split(" ")) {
-               similarNames.add(similarName);
+            if (fields[1].length() > 2) {
+               similarNames.addAll(Arrays.asList(fields[1].substring(1, fields[1].length() - 1).split(" ")));
             }
 
             // add additional similar names

@@ -24,6 +24,8 @@ import java.util.logging.Logger;
  * It's really just a 2D table, with a row for each letter+1 in the source name and a column for each column
  * in the target name.  It's assumed that arcs exist between each cell and its neighbors up, right, and
  * diagonally up and right.
+ *
+ * Read the comment in updateScore for an important note
  */
 public class FST {
    private static Logger logger = Logger.getLogger("org.folg.names.score");
@@ -64,7 +66,29 @@ public class FST {
 
    // update score for a node in the graph
    private void updateScore(int fromX, int fromY, int toX, int toY, int newScore) {
-      if (newScore < score[toX][toY]) {
+      // If you're reading through this file, the following comment is important:
+
+      // Normally, viterbi simply compares newScore < oldScore to compute the lowest-cost path.
+      // But in getBestPathScore we weight earlier edit costs more than later edit costs.
+      // So ideally, we would modify viterbi accordingly, by multiplying the score based upon the positional weight.
+      // But this would introduce floating-point arithmetic, which I want to avoid for performance reasons.
+
+      // So instead, the following code simply tests if the new cost is equal to the old cost, and if it is,
+      // it replaces the old cost with the new cost if the cost leading to the new cost is less than
+      // the cost leading to the old cost.
+
+      // In tests on millions of name pairs, this approach does not produce the minimum cost about 1:10,000 times.
+      // That is, calling getBestPathScore on FST(source,target) != getBestPathScore on FST(target,source) about once
+      // every 10,000 pairs.
+      // If you want to guarantee the minimum cost, create both FST's and take the minimum getBestPathScore.
+      // That's what FeaturesGenerator does
+
+      // If someone can figure out how to modify the viterbi algorithm to take positional weight into account
+      // without introducing floating-point arithmetic, let me know.
+
+      int oldScore = score[toX][toY];
+      if (newScore < oldScore ||
+          (newScore == oldScore && score[fromX][fromY] < score[prevX[toX][toY]][prevY[toX][toY]])) {
          score[toX][toY] = newScore;
          prevX[toX][toY] = fromX;
          prevY[toX][toY] = fromY;
@@ -76,13 +100,9 @@ public class FST {
     * @param we WeightedEdits on which to compute best path
     */
    public void computeBestPath(WeightedEdits we) {
-      for (int x = 0; x < source.length+1; x++) {
-         int minCost = Integer.MAX_VALUE;
-         for (int y = 0; y < target.length+1; y++) {
+      for (int x = 0; x <= source.length; x++) {
+         for (int y = 0; y <= target.length; y++) {
             int curScore = score[x][y];
-            if (curScore < minCost) {
-               minCost = curScore;
-            }
 
             // calc getScore for empty/targetChar edit
             if (y < target.length) {
@@ -128,7 +148,9 @@ public class FST {
       while (toX > 0 || toY > 0) {
          int fromX = prevX[toX][toY];
          int fromY = prevY[toX][toY];
-         scoreBuffer[idx++] = we.getCost(getToken(source, fromX, toX), getToken(target, fromY, toY));
+         int cost = we.getCost(getToken(source, fromX, toX), getToken(target, fromY, toY));
+         scoreBuffer[idx++] = cost;
+         //logger.info("["+getToken(source,fromX,toX)+","+getToken(target,fromY,toY)+"]="+cost);
          toX = fromX;
          toY = fromY;
       }

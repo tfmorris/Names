@@ -27,5 +27,6 @@ public class NormalizerTest extends TestCase {
       Normalizer normalizer = Normalizer.getInstance();
       assertEquals("mcdonald", Utils.join(normalizer.normalize("Mc Donald", true)));
       assertEquals("olson", Utils.join(normalizer.normalize("Olsdatter", true)));
+      assertEquals("alberte", Utils.join(normalizer.normalize("Alberte{1}", false)));
    }
 }

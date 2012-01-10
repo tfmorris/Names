@@ -41,7 +41,8 @@ public class Scorer {
    }
 
    /**
-    * Score two name pieces to see how close they are
+    * Score two name pieces to see how close they are.
+    *
     * @param namePiece1 normalized name piece
     * @param namePiece2 another normalized name piece
     * @return score, higher value indicates more-similar names
@@ -50,8 +51,7 @@ public class Scorer {
       Codes codes1 = featuresGenerator.getCodes(namePiece1);
       Codes codes2 = featuresGenerator.getCodes(namePiece2);
       Features features = new Features();
-      featuresGenerator.setFeatures(namePiece1, codes1, namePiece2, codes2, features, false);
+      featuresGenerator.setFeatures(namePiece1, codes1, namePiece2, codes2, features);
       return featuresScorer.score(features);
    }
-
 }

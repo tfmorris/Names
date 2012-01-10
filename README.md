@@ -186,6 +186,12 @@ to not help, so it was not used.
 * _givenname\_ancestry.txt_ and _surname\_ancestry.txt_ contain the positively-labeled
 pairs from Ancestry's labeled data.
 
+* _givenname\_behindthename.txt_ contains a set of related givennames graciously
+donated by [BehindTheName.com](http://www.behindthename.com), an excellent resource
+for understanding how given names are related.  In particular, the file lists all
+given names that are one "hop" away from the specified name in the "Family tree"
+view at BehindTheName, are of the same gender, and are not an ancient or medieval name.
+
 * _givenname\_nicknames.txt_ contains a set of nicknames.
 
 * _givenname\_werelate.txt_ and _surname\_werelate.txt_ contain name pairs given by
@@ -194,24 +200,65 @@ American Dictionary of Baby Names_, published by Signet (New American Library), 
 and the book "Patrick Hanks and Flavia Hodges, _A Dictionary of Surnames_, Oxford
 University Press, 1990."
 
-* _givenname\_similar\_names\_orig.csv_ and _surname\_similar\_names\_orig.csv_ contain
-the original core of the similar names tables.
+* _givenname\_orig.csv_ and _surname\_orig.csv_ contain the original core of
+the similar names tables.
 
-To create the similar names tables in the search module, the SimilarNameGenerator from
-the Score module was used to create _givenname\_similar\_names\_orig.csv_ and
-_surname\_similar\_names\_orig.csv_.  _givenname\_nicknames.txt_ and
+To create the similar names tables in the search module, first, the SimilarNameAdder
+from the Score module was used to add all names scoring above a threshold of 2.3
+to each of the 70,000 most-frequent givennames and above a threshold of 0.7
+to each of the 200,000 most-frequent surnames.  For performance reasons,
+SimilarNameAdder adds considers only names greater than the specified name, so
+SimilarNameAugmenter was used with the -p option to add the reverse pairs.
+
+The result is stored in _givenname\_orig.csv_ and _surname\_orig.csv_.
+
+At this point, the precision and recall of the similar-names tables against
+Ancestry's labeled pairs were:
+
+* Given names: P/R=97.4/71.6
+* Surnames: P/R=89.4/76.4
+
+Compared to Soundex:
+
+* Given names: P/R=97.2/64.6
+* Surnames: P/R=88.6/67.8
+
+This represents a 20% decrease in false-negatives (names that should be searched
+together but are not) for given names, and a 27% decrease in false-negatives for surnames.
+
+Next, _givenname\_behindthename.txt\_, _givenname\_nicknames.txt_, and
 _givenname\_werelate.txt_ were added to the given names table, and
 _surname\_werelate.txt_ was added to the surnames table, using SimilarNameAugmenter
-from the Score module. At this point, the Precision and Recall of the similar-names
-tables against Ancestry's labeled pairs were:
+from the Score module. The options passed to SimilarNameAugmenter were:
+* behindthename: -p -r
+* nicknames: -a
+* werelate: -p
+At this point, the Precision and Recall of the similar-names tables against
+Ancestry's labeled pairs were:
 
-* Given names: P/R=96.9/73.7
+* Given names: P/R=96.8/74.4
 * Surnames: P/R=89.2/76.8
 
-Finally, we added _givenname\_ancestry.txt_ and _surname\_ancestry.txt_ to create the
-tables found in the Search module, although user-modifications to these tables as part of
-the [Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project)
+So we end up with a 28% decrease in false-negatives for both givennames and surnames.
+
+Finally, we added the positively-labeled training pairs: _givenname\_ancestry.txt_
+and _surname\_ancestry.txt_ so the initial tables would be as complete as possible
+to create the tables found in the Search module. User-modifications to these tables
+as part of the [Variant names project](http://www.werelate.org/wiki/WeRelate:Variant_names_project)
 will further modify, and hopefully improve, these tables.
+
+If you want to re-create the P/R numbers above, you won't be able to test using the
+similar names files in the Search module, since they include the training data.
+Instead, you'll need to start with the _givenname\_similar\_names\_orig.csv_ or
+_surname\_similar\_names\_orig.csv_ file in this module and follow the process
+outlined above. Then run _TableEvaluator.java_ with the "-t" option to pass in the
+table you just created.
+
+Also, if you use _TableEvaluator.java_ or _CodeEvaluator.java_ with
+_AncestryGivennamePairs.csv_ or _AncestrySurnamePairs.csv_, you'll see some warnings
+about invalid lines.  This is to be expected.  Some lines in the training data contain
+invalid names, like "nn", which is an abbrevation for "no name," not an actual name.
+The evaluators recognize this, skip over the line, and list it as a warning.
 
 Service module
 ==============
@@ -233,3 +280,33 @@ Building
 --------
 
 `mvn package` creates a war file that you can deploy to a servlet container like Tomcat
+
+Future work
+===========
+
+Overall, given names had an average of 32 similar names, and surnames had an average
+of 26 similar names.  For search engines like
+[Lucene](http://lucene.apache.org/java/docs/index.html), that's not too bad,
+because each variant lookup results in the union of a generally-small result set.
+However, the most-frequent 1000 given names and surnames had an average of 61
+and 51 similar names respectively, which means that the most-frequently searched
+names require a lot of extra lookups.
+
+We can do better.
+
+One thing that can be done to reduce the number of extra lookups necessary when
+searching for similar names is to cluster the similar names together into lots of
+small clusters.  Then instead of looking up each similar name separately,
+_Searcher.getAdditionalIndexTokens_ would return the cluster code for each
+name, and _Searcher.getAdditionalSearchTokens_ would return the distinct cluster
+codes for each of the similar names.  By clustering the names according to how
+frequently they appear together as similar names, we would expect the number of
+distinct clusters for each set of similar names to be much smaller than the
+number of similar names themselves.
+
+Another approach would be to index names using a high-precision, low-recall
+coder like Refined Soundex. Then at search time look up each of the distinct
+refined soundex codes for the similar names.
+
+I'd love some help tackling this problem.  [Mahout](http://mahout.apache.org/)
+looks like a good tool to generate clusters.
