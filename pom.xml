@@ -7,10 +7,10 @@
   <packaging>pom</packaging>
   <name>Name standard</name>
   <modules>
-    <module>names-search</module>
-    <module>names-score</module>
-     <module>names-eval</module>
-     <module>names-service</module>
+    <module>search</module>
+    <module>score</module>
+     <module>eval</module>
+     <module>service</module>
   </modules>
   <url>http://maven.apache.org</url>
 

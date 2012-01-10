@@ -187,7 +187,7 @@ to not help, so it was not used.
 pairs from Ancestry's labeled data.
 
 * _givenname\_behindthename.txt_ contains a set of related givennames graciously
-donated by [BehindTheName.com](http://www.behindthename.com), an excellent resource
+donated by [BehindTheName.com](http://www.behindthename.com), an _excellent_ resource
 for understanding how given names are related.  In particular, the file lists all
 given names that are one "hop" away from the specified name in the "Family tree"
 view at BehindTheName, are of the same gender, and are not an ancient or medieval name.

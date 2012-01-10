@@ -1,0 +1,9 @@
+# if you've loaded similar names into a database, copy this file to db_memcache.properties and customize
+
+databaseDriver=com.mysql.jdbc.Driver
+databaseURL=jdbc:mysql://localhost/mydatabase
+databaseUser=myuser
+databasePassword=mypassword
+memcacheAddresses=localhost:11111
+memcacheKeyPrefix=name
+memcacheExpiration=86400

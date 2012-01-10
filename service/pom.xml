@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.folg.names</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0</version>
+  </parent>
+
+  <artifactId>service</artifactId>
+  <packaging>war</packaging>
+  <name>Name-standard REST service</name>
+
+  <dependencies>
+     <dependency>
+       <groupId>org.folg.names</groupId>
+       <artifactId>score</artifactId>
+       <version>${project.version}</version>
+     </dependency>
+     <dependency>
+       <groupId>com.sun.jersey</groupId>
+       <artifactId>jersey-servlet</artifactId>
+       <version>1.10</version>
+     </dependency>
+     <dependency>
+       <groupId>com.sun.jersey</groupId>
+       <artifactId>jersey-json</artifactId>
+       <version>1.10</version>
+     </dependency>
+  </dependencies>
+</project>
