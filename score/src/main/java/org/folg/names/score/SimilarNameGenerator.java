@@ -16,6 +16,11 @@
 
 package org.folg.names.score;
 
+import org.folg.names.score.Codes;
+import org.folg.names.score.Features;
+import org.folg.names.score.FeaturesGenerator;
+import org.folg.names.score.FeaturesScorer;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;

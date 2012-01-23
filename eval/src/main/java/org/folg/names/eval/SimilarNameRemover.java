@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package org.folg.names.score;
+package org.folg.names.eval;
 
+import org.folg.names.score.Scorer;
+import org.folg.names.score.Utils;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -135,7 +137,7 @@ public class SimilarNameRemover {
 
          // write similar names
          for (String name : similarNamesMap.keySet()) {
-            similarNamesWriter.println("\""+name+"\",\""+Utils.join(" ",similarNamesMap.get(name))+"\"");
+            similarNamesWriter.println("\""+name+"\",\""+ Utils.join(" ", similarNamesMap.get(name))+"\"");
          }
       }
       catch (IOException e) {

@@ -105,15 +105,6 @@ indicating how similar they are.
 * _Scorer.java_ - contains the scoring function.  See _ScorerTest.java_ for an
 example of use.  Remember to normalize the names beforehand.
 
-* _SimilarNameGenerator.java_ returns a set of names similar to the specified
-name. The core of the similar-names tables in the search module were built
-using this function.  See _SimilarNameGeneratorTest.java_ for an example.
-
-* _SimilarNameAugmenter.java_ adds additional names to a similar-names file.
-If you had your own custom list of similar names, they could be added to the
-similar-names tables in the search module using this function.  '''If you do
-have your own list of similar names, we hope you share them with us.'''
-
 * _DMSoundex.java_ - a simplified implementation of Daitch-Mokotov soundex
 
 * _Nysiis.java_ - an implementation of NYSIIS
@@ -132,6 +123,10 @@ Edit Distance.  The weights for each feature were learned by running the labeled
 training data provided by Ancestry.com through [Weka](http://www.cs.waikato.ac.nz/ml/weka/)
 A number of other features were evaluated, but these features seemed to provide
 the best results.
+
+* _SimilarNameGenerator.java_ returns a set of names similar to the specified
+name. The core of the similar-names tables in the search module were built
+using this function.  See _SimilarNameGeneratorTest.java_ for an example.
 
 * _givennameClusters.txt_ and _surnameClusters.txt_ - these files can be used
 to speed up _SimilarNameGenerator_.  By clustering the names, rather than scoring
@@ -179,6 +174,14 @@ incorporate your coder.
 
 * _TableEvaluator.java_ shows how to evaluate a table-based approach.
 
+* _SimilarNameAdder.java_ is used to generate a core similar-names file based upon
+names scoring above a certain threshold.
+
+* _SimilarNameAugmenter.java_ adds additional names to a similar-names file.
+If you had your own custom list of similar names, they could be added to the
+similar-names tables in the search module using this function.  '''If you do
+have your own list of similar names, we hope you share them with us.'''
+
 * _AncestryGivennamePairs.csv_, _AncestrySurnamePairs.csv_, and _BorderSurnamePairs.csv_
 contain the labeled pairs provided by Ancestry.  However, BorderSurnamePairs was found
 to not help, so it was not used.
@@ -203,8 +206,8 @@ University Press, 1990."
 * _givenname\_orig.csv_ and _surname\_orig.csv_ contain the original core of
 the similar names tables.
 
-To create the similar names tables in the search module, first, the SimilarNameAdder
-from the Score module was used to add all names scoring above a threshold of 2.3
+To create the similar names tables in the search module, first, SimilarNameAdder
+was used to add all names scoring above a threshold of 2.3
 to each of the 70,000 most-frequent givennames and above a threshold of 0.7
 to each of the 200,000 most-frequent surnames.  For performance reasons,
 SimilarNameAdder adds considers only names greater than the specified name, so
@@ -244,7 +247,7 @@ So we end up with a 28% decrease in false-negatives for both givennames and surn
 Finally, we added the positively-labeled training pairs: _givenname\_ancestry.txt_
 and _surname\_ancestry.txt_ so the initial tables would be as complete as possible
 to create the tables found in the Search module. User-modifications to these tables
-as part of the [Variant names project](http://www.werelate.org/wiki/WeRelate:Variant_names_project)
+as part of the [Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project)
 will further modify, and hopefully improve, these tables.
 
 If you want to re-create the P/R numbers above, you won't be able to test using the
@@ -281,8 +284,8 @@ Building
 
 `mvn package` creates a war file that you can deploy to a servlet container like Tomcat
 
-Future work
-===========
+Roadmap
+=======
 
 Overall, given names had an average of 32 similar names, and surnames had an average
 of 26 similar names.  For search engines like

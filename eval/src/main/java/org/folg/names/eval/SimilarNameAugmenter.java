@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.folg.names.score;
+package org.folg.names.eval;
 
+import org.folg.names.score.Utils;
 import org.folg.names.search.Normalizer;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.StringEncoder;
@@ -166,7 +167,7 @@ public class SimilarNameAugmenter {
             }
 
             // write line
-            similarNamesWriter.println("\""+name+"\",\""+Utils.join(" ",similarNames)+"\"");
+            similarNamesWriter.println("\""+name+"\",\""+ Utils.join(" ", similarNames)+"\"");
          }
       }
       catch (IOException e) {

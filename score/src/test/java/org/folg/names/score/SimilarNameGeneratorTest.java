@@ -16,7 +16,10 @@
 
 package org.folg.names.score;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.folg.names.score.SimilarNameGenerator;
+import org.folg.names.score.Utils;
 
 public class SimilarNameGeneratorTest extends TestCase {
    public SimilarNameGeneratorTest(String name) {
@@ -25,7 +28,7 @@ public class SimilarNameGeneratorTest extends TestCase {
 
    public void testSimilarNameGenerator() throws Exception {
       SimilarNameGenerator sng = new SimilarNameGenerator(true, true);
-      assertEquals("quaas quash quasie quessy quatsy cass kass quatsie quijas casse kasse quish quack catts quates",
+      Assert.assertEquals("quaas quash quasie quessy quatsy cass kass quatsie quijas casse kasse quish quack catts quates",
               Utils.join(" ", sng.generateSimilarNames("quass")));
    }
 }

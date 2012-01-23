@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package org.folg.names.score;
+package org.folg.names.eval;
 
+import org.folg.names.score.Scorer;
+import org.folg.names.score.Utils;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -79,7 +81,7 @@ public class SimilarNameAdder {
                      }
                   }
                }
-               similarNamesWriter.println("\""+name+"\",\""+Utils.join(" ",similarNames)+"\"");
+               similarNamesWriter.println("\""+name+"\",\""+ Utils.join(" ", similarNames)+"\"");
                if (cnt % 1000 == 0) {
                   System.out.print(".");
                }
