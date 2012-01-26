@@ -1,14 +1,14 @@
-The purpose of this project is to create a comprehensive database of similar
-names to include in searches whenever a particular name is searched.
+The purpose of this project is to create a comprehensive database of name
+variants to include in searches whenever a particular name is searched.
 It is a better name-matcher than Soundex.  Read more about the
-[Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project)
+[Variant names project](http://www.werelate.org/wiki/WeRelate:Variant_names_project)
 
-This readme explains how to incorporate similar names into your own website.
+This readme explains how to incorporate name variants into your own website.
 
 Search module
 =============
 
-The search module contains everything you need to incorporate similar names into
+The search module contains everything you need to incorporate name variants into
 your own website.
 
 * _Normalizer.java_ - converts a user-entered text string to a normalized form -
@@ -26,7 +26,7 @@ soundex code for the name when the name rare. It does not return any tokens
 otherwise.  Thus, most names require just a single token (the normalized name
 itself), while some names require two tokens.
 
-    * To return similar names for a user-specified name at search time, search for
+    * To return variants for a user-specified name at search time, search for
 the normalized form of the user-specified name as well as additional tokens
 returned by _getAdditionalSearchTokens_. On average, _getAdditionalSearchTokens_
 will return 25-35 tokens to include in searches.
@@ -39,10 +39,10 @@ not easy.  That is, Vandyke and Ohare are prefixed, but Vance and Olson are not.
 This table attempts to identify common prefixed surnames.  Rare surnames use
 the prefix list in _searcher.properties_ to estimate whether they are prefixed.
 
-* _givenname\_similar\_names.csv_ is a table of similar names for the 70,000
+* _givenname\_similar\_names.csv_ is a table of variants for the 70,000
 most-frequent given names in Ancestry.com's database.
 
-* _surname\_similar\_names.csv_ is a table of similar names for the 200,000
+* _surname\_similar\_names.csv_ is a table of variants for the 200,000
 most-frequent surnames in Ancestry.com's database.
 
 Rare names not in the above tables appear less than once in every 5,000,000
@@ -51,7 +51,7 @@ _getAdditionalIndexTokens_.  _getAdditionalSearchTokens_ includes these names by
 including the Soundex code of the searched-for name as one of the tokens to search.
 
 The above tables will be updated periodically to incorporate user modifications
-made at the [Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project).
+made at the [Variant names project](http://www.werelate.org/wiki/WeRelate:Variant_names_project).
 As part of this project, people are being encouraged not only to improve the names,
 but also to review the changes made by others.  A changes log
 (see [Changes log](http://www.werelate.org/wiki/Special:NamesLog)) will be included
@@ -125,8 +125,7 @@ A number of other features were evaluated, but these features seemed to provide
 the best results.
 
 * _SimilarNameGenerator.java_ returns a set of names similar to the specified
-name. The core of the similar-names tables in the search module were built
-using this function.  See _SimilarNameGeneratorTest.java_ for an example.
+name. See _SimilarNameGeneratorTest.java_ for an example.
 
 * _givennameClusters.txt_ and _surnameClusters.txt_ - these files can be used
 to speed up _SimilarNameGenerator_.  By clustering the names, rather than scoring
@@ -167,20 +166,20 @@ Eval module
 ===========
 
 Use this module if you want to evaluate the precision and recall of your own coder or
-similar-names tables against Ancestry's labeled pairs.
+name variants tables against Ancestry's labeled pairs.
 
 * _CodeEvaluator.java_ shows how to evaluate a code-based approach; modify this to
 incorporate your coder.
 
 * _TableEvaluator.java_ shows how to evaluate a table-based approach.
 
-* _SimilarNameAdder.java_ is used to generate a core similar-names file based upon
+* _SimilarNameAdder.java_ is used to generate a core name-variants file based upon
 names scoring above a certain threshold.
 
-* _SimilarNameAugmenter.java_ adds additional names to a similar-names file.
-If you had your own custom list of similar names, they could be added to the
-similar-names tables in the search module using this function.  '''If you do
-have your own list of similar names, we hope you share them with us.'''
+* _SimilarNameAugmenter.java_ adds additional names to a name-variants file.
+If you had your own custom list of name variants, they could be added to the
+core name-variants file using this function.
+'''If you do have your own list of name variants, we hope you share them with us.'''
 
 * _AncestryGivennamePairs.csv_, _AncestrySurnamePairs.csv_, and _BorderSurnamePairs.csv_
 contain the labeled pairs provided by Ancestry.  However, BorderSurnamePairs was found
@@ -204,9 +203,9 @@ and the book "Patrick Hanks and Flavia Hodges, _A Dictionary of Surnames_, Oxfor
 University Press, 1990."
 
 * _givenname\_orig.csv_ and _surname\_orig.csv_ contain the original core of
-the similar names tables.
+the names-variants tables.
 
-To create the similar names tables in the search module, first, SimilarNameAdder
+To create the name-variants tables in the search module, first, SimilarNameAdder
 was used to add all names scoring above a threshold of 2.3
 to each of the 70,000 most-frequent givennames and above a threshold of 0.7
 to each of the 200,000 most-frequent surnames.  For performance reasons,
@@ -215,7 +214,7 @@ SimilarNameAugmenter was used with the -p option to add the reverse pairs.
 
 The result is stored in _givenname\_orig.csv_ and _surname\_orig.csv_.
 
-At this point, the precision and recall of the similar-names tables against
+At this point, the precision and recall of the name-variants tables against
 Ancestry's labeled pairs were:
 
 * Given names: P/R=97.4/71.6
@@ -236,7 +235,7 @@ from the Score module. The options passed to SimilarNameAugmenter were:
 * behindthename: -p -r
 * nicknames: -a
 * werelate: -p
-At this point, the Precision and Recall of the similar-names tables against
+At this point, the Precision and Recall of the name-variants tables against
 Ancestry's labeled pairs were:
 
 * Given names: P/R=96.8/74.4
@@ -247,11 +246,11 @@ So we end up with a 28% decrease in false-negatives for both givennames and surn
 Finally, we added the positively-labeled training pairs: _givenname\_ancestry.txt_
 and _surname\_ancestry.txt_ so the initial tables would be as complete as possible
 to create the tables found in the Search module. User-modifications to these tables
-as part of the [Similar names project](http://www.werelate.org/wiki/WeRelate:Similar_names_project)
+as part of the [Variant names project](http://www.werelate.org/wiki/WeRelate:Variant_names_project)
 will further modify, and hopefully improve, these tables.
 
 If you want to re-create the P/R numbers above, you won't be able to test using the
-similar names files in the Search module, since they include the training data.
+name-variants files in the Search module, since they include the training data.
 Instead, you'll need to start with the _givenname\_similar\_names\_orig.csv_ or
 _surname\_similar\_names\_orig.csv_ file in this module and follow the process
 outlined above. Then run _TableEvaluator.java_ with the "-t" option to pass in the
@@ -267,7 +266,7 @@ Service module
 ==============
 
 Use this module if you want to generate search and index tokens or score names
-by issuing REST calls.  This module allows you to use the Similar names project
+by issuing REST calls.  This module allows you to use the Variant names project
 as a REST service instead of as a library.
 
 The service endpoints are:
@@ -287,29 +286,34 @@ Building
 Roadmap
 =======
 
-Overall, given names had an average of 32 similar names, and surnames had an average
-of 26 similar names.  For search engines like
+Overall, given names had an average of 32 variants, and surnames had an average
+of 26 variants.  For search engines like
 [Lucene](http://lucene.apache.org/java/docs/index.html), that's not too bad,
 because each variant lookup results in the union of a generally-small result set.
 However, the most-frequent 1000 given names and surnames had an average of 61
-and 51 similar names respectively, which means that the most-frequently searched
+and 51 variants respectively, which means that the most-frequently searched
 names require a lot of extra lookups.
 
 We can do better.
 
 One thing that can be done to reduce the number of extra lookups necessary when
-searching for similar names is to cluster the similar names together into lots of
-small clusters.  Then instead of looking up each similar name separately,
+searching for variants is to cluster the variants into lots of
+small clusters.  Then instead of looking up each variant separately,
 _Searcher.getAdditionalIndexTokens_ would return the cluster code for each
 name, and _Searcher.getAdditionalSearchTokens_ would return the distinct cluster
-codes for each of the similar names.  By clustering the names according to how
-frequently they appear together as similar names, we would expect the number of
-distinct clusters for each set of similar names to be much smaller than the
-number of similar names themselves.
+codes for each of the variants.  By clustering the names according to how
+frequently they appear together as variants, we would expect the number of
+distinct clusters for each set of variants to be much smaller than the
+number of variants themselves.
 
 Another approach would be to index names using a high-precision, low-recall
 coder like Refined Soundex. Then at search time look up each of the distinct
-refined soundex codes for the similar names.
+refined soundex codes for the variants.
 
 I'd love some help tackling this problem.  [Mahout](http://mahout.apache.org/)
 looks like a good tool to generate clusters.
+
+Other projects
+==============
+
+Check out [other genealogy projects[(https://github.com/DallanQ)
