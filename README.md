@@ -316,4 +316,4 @@ looks like a good tool to generate clusters.
 Other projects
 ==============
 
-Check out [other genealogy projects[(https://github.com/DallanQ)
+Check out [other genealogy projects](https://github.com/DallanQ)
