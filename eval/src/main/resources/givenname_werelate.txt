@@ -92,7 +92,7 @@ victorine vicki vickie vicky victoria vittoria
 francis fannie fanny fran frances francesca francesco francine francisca francisco franco francois frank frankie franz françois
 charles carl carlo carlos carol carrol carroll charley charlie chuck karel karl karol
 cara carolina carolyn lina
-ike issac isaac isaak isaiah 
+ike issac isaac isaak isaiah
 austin august augustin augustine gus
 siegfried sid
 rochelle rachael rachel rachelle rae raquel raye shelley shellie shelly
@@ -116,7 +116,7 @@ arletta carlotta charlotte lotte lottie
 louisa lois lou louise lu'isa luisa lula lulie lulu ouida
 mandy amanda manda miranda randi randy
 arlo carlo
-leon leoncio leonard 
+leon leoncio leonard
 pablo paolo paul
 eustace stacey stacy
 julia ann anne gill gillie giulia jill juliana julianne julie julienne juliet juliette lee leigh
@@ -315,7 +315,7 @@ christian chris christen kris kristen kristian
 carlton carleton
 rosaline linda rosalina rosalind rosalinda rosalyn roseline roselyn roslyn
 nicola coletta colette collette etta nicole nicoletta nicolina nikola vicki
-enrique enrico hal hank harry  heinrich heinz henri henry henryk
+enrique enrico hal hank harry heinrich heinz henri henry henryk
 benito ben benedict bennett bennie benny
 audrey audra audrie audry ethel
 reynold aldo reggie reginald rex reynaldo rinaldo ron ronald ronnie ronny
@@ -455,7 +455,7 @@ jeanette ann hannah jan jana jane janelle janet janetta janette janey janice jan
 eric erick erik fred freddie freddy frederic frederica frederich frederick fredric fredrick friedrich rick rickey rickie ricky
 joyce jocelyn jocie jos
 lavina lavena lavenia lavinia levina lovina vena vina viney vinnie
-cordelia cordie delia della dellie 
+cordelia cordie delia della dellie
 sylvia silva silvia vena vina
 walter wally wallie walt watson
 magda alena lena madaline madalyn madelaine madeleine madelene madeline madelyn madlyn magdalen magdalena magdalene magdaline
@@ -478,7 +478,7 @@ millie amalia amelia cam camelia camilla camille cammie emelia emilia emilie emi
 lorne lorn lorna
 russell russ russel
 gruffydd griffith
-john ian ivan jack jackie jan johan johannes johney johnie johnnie johnny johnson johny jon jonnie juan sean shane shaun shawn jean juan giovanni gianni johann johannes hannes hans hanschen ivan vasha jan jens evan evans jack nino hank joan van yan zane janey 
+john ian ivan jack jackie jan johan johannes johney johnie johnnie johnny johnson johny jon jonnie juan sean shane shaun shawn jean juan giovanni gianni johann johannes hannes hans hanschen ivan vasha jan jens evan evans jack nino hank joan van yan zane janey
 corrie anne corey cory lee
 jeremiah jeremy jerry
 gerald fitz gerry jerald jerold jerrold jerry
@@ -486,7 +486,7 @@ cameron ron ronny
 ernest arno earnest ernie ernst
 nick claus colin collin collins domenico dominick dominik dominique klaus nicholas nickolas niels nikolaus nils
 theodore ted teddy teddie teodor terry theo theophilus
-theophilus ted teddy teddie teodor terry theo 
+theophilus ted teddy teddie teodor terry theo
 jedidah jed
 celia cecelia cecile cecilia céline sheila shelia
 leila laila lila lilah lyla
