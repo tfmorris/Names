@@ -1,3 +1,7 @@
+NOTE: This repo is/was a clone of https://github.com/DallanQ/Names, which is no longer available.
+Although given an Apache license by its original author, any updates incorporated from WeRelate
+should respect its Creative Commons Attribution-ShareAlike license.
+
 The purpose of this project is to create a comprehensive database of name
 variants to include in searches whenever a particular name is searched.
 It is a better name-matcher than Soundex.  Read more about the
